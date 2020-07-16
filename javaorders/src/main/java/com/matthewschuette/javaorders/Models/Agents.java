@@ -28,8 +28,7 @@ public class Agents {
     public Agents() {
     }
 
-    public Agents(long agentcode, String agentname, String workingarea, double commission, String phone, String country) {
-        this.agentcode = agentcode;
+    public Agents(String agentname, String workingarea, double commission, String phone, String country) {
         this.agentname = agentname;
         this.workingarea = workingarea;
         this.commission = commission;

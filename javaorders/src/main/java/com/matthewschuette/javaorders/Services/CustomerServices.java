@@ -9,4 +9,5 @@ public interface CustomerServices {
     List<Customers> findAllCustomerOrders();
     Customers findCustomersById(long id);
     List<Customers> findByCustomerName(String custname);
+    void delete(long id);
 }

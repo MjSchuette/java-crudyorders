@@ -3,13 +3,15 @@ package com.matthewschuette.javaorders.Controllers;
 import com.matthewschuette.javaorders.Models.Customers;
 import com.matthewschuette.javaorders.Services.CustomerServices;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -45,5 +47,37 @@ public class CustomersController {
         List<Customers> myCustomerList = customerService.findByCustomerName(custname);
         return new ResponseEntity<>(myCustomerList,
                 HttpStatus.OK);
+    }
+
+    // DELETE http://localhost:2019/customers/customer/{id}
+    @DeleteMapping(value = "/customer/{id}")
+    public ResponseEntity<?> deleteCustomerById(@PathVariable long id){
+        customerService.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    // POST http://localhost:2019/customers/customer
+    @PostMapping(value = "/customer", consumes = "application/json")
+    public ResponseEntity<?> addNewCustomer(@Valid @RequestBody Customers newCustomer){
+        newCustomer.setCustcode(0);
+        newCustomer = customerService.save(newCustomer);
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        URI newCustomerURI = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("{/custcode}")
+                .buildAndExpand(newCustomer.getCustcode())
+                .toUri();
+        responseHeaders.setLocation(newCustomerURI);
+
+        return new ResponseEntity<>(null, responseHeaders, HttpStatus.CREATED);
+    }
+
+    // PUT http://localhost:2019/customers/customer/19
+    @PutMapping(value = "/customer/{id}", produces = "application/json", consumes = "application/json")
+    public ResponseEntity<?> updateCustomer(@Valid @RequestBody Customers updateCustomers, @PathVariable long id) {
+        updateCustomers.setCustcode(id);
+        updateCustomers = customerService.save(updateCustomers);
+
+        return new ResponseEntity<>(updateCustomers, HttpStatus.OK);
     }
 }

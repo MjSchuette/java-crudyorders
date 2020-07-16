@@ -39,8 +39,7 @@ public class Customers {
     public Customers() {
     }
 
-    public Customers(long custcode, String custname, String custcity, String workingarea, String custcountry, String grade, double openingamt, double receiveamt, double paymentamt, double outstandingamt, String phone) {
-        this.custcode = custcode;
+    public Customers(String custname, String custcity, String workingarea, String custcountry, String grade, double openingamt, double receiveamt, double paymentamt, double outstandingamt, String phone) {
         this.custname = custname;
         this.custcity = custcity;
         this.workingarea = workingarea;
