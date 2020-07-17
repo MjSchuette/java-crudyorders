@@ -57,14 +57,14 @@ public class CustomersController {
     }
 
     // POST http://localhost:2019/customers/customer
-    @PostMapping(value = "/customer", consumes = "application/json")
+    @PostMapping(value = "/customer", consumes = {"application/json"})
     public ResponseEntity<?> addNewCustomer(@Valid @RequestBody Customers newCustomer){
         newCustomer.setCustcode(0);
         newCustomer = customerService.save(newCustomer);
 
         HttpHeaders responseHeaders = new HttpHeaders();
         URI newCustomerURI = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("{/custcode}")
+                .path("/{custcode}")
                 .buildAndExpand(newCustomer.getCustcode())
                 .toUri();
         responseHeaders.setLocation(newCustomerURI);
@@ -73,11 +73,18 @@ public class CustomersController {
     }
 
     // PUT http://localhost:2019/customers/customer/19
-    @PutMapping(value = "/customer/{id}", produces = "application/json", consumes = "application/json")
+    @PutMapping(value = "/customer/{id}", produces = {"application/json"}, consumes = {"application/json"})
     public ResponseEntity<?> updateCustomer(@Valid @RequestBody Customers updateCustomers, @PathVariable long id) {
         updateCustomers.setCustcode(id);
         updateCustomers = customerService.save(updateCustomers);
 
         return new ResponseEntity<>(updateCustomers, HttpStatus.OK);
+    }
+
+    // PATCH http://localhost:2019/customers/customer/19
+    @PatchMapping(value = "/customer/{id}", consumes = {"application/json"})
+    public ResponseEntity<?> updatePartCustomer(@RequestBody Customers updateCustomer, @PathVariable long id) {
+        customerService.update(updateCustomer, id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

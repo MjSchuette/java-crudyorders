@@ -21,7 +21,7 @@ public class Orders {
 
     @ManyToOne
     @JoinColumn(name = "custcode", nullable = false)
-    @JsonIgnoreProperties({"agent", "orders"})
+    @JsonIgnoreProperties("orders")
     private Customers customer;
 
     @ManyToMany()
@@ -34,9 +34,10 @@ public class Orders {
     public Orders() {
     }
 
-    public Orders(double ordamount, double advanceamount, String orderdescription) {
+    public Orders(double ordamount, double advanceamount, Customers custcode, String orderdescription) {
         this.ordamount = ordamount;
         this.advanceamount = advanceamount;
+        this.customer = custcode;
         this.orderdescription = orderdescription;
     }
 

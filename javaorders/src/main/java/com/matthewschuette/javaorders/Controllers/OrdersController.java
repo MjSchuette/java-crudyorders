@@ -35,14 +35,14 @@ public class OrdersController {
     }
 
     // POST http://localhost:2019/orders/order
-    @PostMapping(value = "/order", consumes = "application/json")
+    @PostMapping(value = "/order", consumes = {"application/json"})
     public ResponseEntity<?> addNewOrder(@Valid @RequestBody Orders newOrder) {
         newOrder.setOrdnum(0);
         newOrder = orderService.save(newOrder);
 
         HttpHeaders responseHeaders = new HttpHeaders();
         URI newCustomerURI = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("{/ordnum}")
+                .path("/{ordnum}")
                 .buildAndExpand(newOrder.getOrdnum())
                 .toUri();
         responseHeaders.setLocation(newCustomerURI);
@@ -51,7 +51,7 @@ public class OrdersController {
     }
 
     // PUT http://localhost:2019/orders/order/63
-    @PutMapping(value = "/order/{id}", produces = "application/json", consumes = "application/json")
+    @PutMapping(value = "/order/{id}", produces = {"application/json"}, consumes = {"application/json"})
     public ResponseEntity<?> updateOrder(@Valid @RequestBody Orders updateOrder, @PathVariable long id) {
         updateOrder.setOrdnum(id);
         updateOrder = orderService.save(updateOrder);

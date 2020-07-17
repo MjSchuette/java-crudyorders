@@ -6,8 +6,14 @@ import java.util.List;
 
 public interface CustomerServices {
     Customers save(Customers customers);
+
     List<Customers> findAllCustomerOrders();
+
     Customers findCustomersById(long id);
+
     List<Customers> findByCustomerName(String custname);
+
     void delete(long id);
+
+    Customers update(Customers customers, long id);
 }
